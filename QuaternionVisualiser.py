@@ -53,6 +53,16 @@ def get_user_rotation():
         return Quaternion(1, 0, 0, 0)  # No rotation by default
 
 
+def hex_to_rgb(hex_color):
+    # Converts a hexadecimal color string (like '#RRGGBB') to a tuple of RGB values between 0 and 1.
+    if hex_color.startswith('#'):
+        hex_color = hex_color[1:]
+    r = int(hex_color[0:2], 16) / 255.0
+    g = int(hex_color[2:4], 16) / 255.0
+    b = int(hex_color[4:6], 16) / 255.0
+    return (r, g, b)
+
+
 # Defines the cube's vertices
 cube_vertices = [
     (0.5, 0.5, 0.5),
@@ -89,7 +99,10 @@ rotation_quaternion = get_user_rotation()
 rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
 
 
-def draw_cube(vertices):
+def draw_cube(vertices, color=(1, 1, 1)):  # default color is white
+    if isinstance(color, str):
+        color = hex_to_rgb(color)
+    glColor3f(*color)
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
@@ -101,6 +114,7 @@ def main():
     pygame.init()
     display = (600, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+    # argNames=('fovy', 'aspect', 'zNear', 'zFar')
     gluPerspective(30, (display[0] / display[1]), 0.1, 50.0)
     glTranslatef(0.0, 0.0, -5)
 
@@ -111,11 +125,15 @@ def main():
                 return
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glRotatef(1, 3, 1, 1)  # Rotates for better visualization
-        draw_cube(cube_vertices)  # Draws original cube
-        draw_cube(rotated_vertices)  # Draws rotated cube
+        glRotatef(1, 0, 1, 0)  # Rotates for better visualization
+
+        # Draws original cube in blue
+        draw_cube(cube_vertices, color="#3089ff")
+        # Draws rotated cube in red
+        draw_cube(rotated_vertices, color="#ff2658")
+
         pygame.display.flip()
-        pygame.time.wait(10)
+        pygame.time.wait(20)  # 20ms delay (how fast the cube rotates)
 
 
 if __name__ == "__main__":
