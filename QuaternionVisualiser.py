@@ -30,6 +30,29 @@ class Quaternion:
         return (rotated.x, rotated.y, rotated.z)
 
 
+def get_user_rotation():
+    try:
+        angle = float(input("Enter the angle of rotation (in degrees): "))
+        x = float(input("Enter the x component of the rotation axis: "))
+        y = float(input("Enter the y component of the rotation axis: "))
+        z = float(input("Enter the z component of the rotation axis: "))
+
+        # Normalize the rotation axis (optional but a good practice)
+        magnitude = math.sqrt(x**2 + y**2 + z**2)
+        x /= magnitude
+        y /= magnitude
+        z /= magnitude
+
+        # Convert the angle to radians and compute half-angle for quaternions
+        half_angle_rad = math.radians(angle / 2)
+        s = math.sin(half_angle_rad)
+
+        return Quaternion(math.cos(half_angle_rad), s*x, s*y, s*z)
+    except ValueError:
+        print("Invalid input! Using default rotation.")
+        return Quaternion(1, 0, 0, 0)  # No rotation by default
+
+
 # Defines the cube's vertices
 cube_vertices = [
     (0.5, 0.5, 0.5),
@@ -58,12 +81,11 @@ edges = [
     (6, 7),
 ]
 
-# Defines a rotation quaternion, e.g., 180-degree rotation around the y-axis
-angle = 180 / 2  # half angle for quaternions
-s = math.sin(math.radians(angle))
-rotation_quaternion = Quaternion(math.cos(math.radians(angle)), 0, s, 0)
 
-# Rotates the cube's vertices
+# Get the rotation quaternion from the user
+rotation_quaternion = get_user_rotation()
+
+# Rotate the cube's vertices
 rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
 
 
