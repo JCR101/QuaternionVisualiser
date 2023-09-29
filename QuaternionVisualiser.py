@@ -4,10 +4,8 @@ import math
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-# Quaternion class definition
 
-
-class Quaternion:
+class Quaternion:  # Quaternion class definition
     def __init__(self, w, x, y, z):
         self.w = w
         self.x = x
@@ -37,13 +35,13 @@ def get_user_rotation():
         y = float(input("Enter the y component of the rotation axis: "))
         z = float(input("Enter the z component of the rotation axis: "))
 
-        # Normalize the rotation axis (optional but a good practice)
+        # Normalizes the rotation axis
         magnitude = math.sqrt(x**2 + y**2 + z**2)
         x /= magnitude
         y /= magnitude
         z /= magnitude
 
-        # Convert the angle to radians and compute half-angle for quaternions
+        # Converts the angle to radians and compute half-angle for quaternions
         half_angle_rad = math.radians(angle / 2)
         s = math.sin(half_angle_rad)
 
@@ -92,10 +90,10 @@ edges = [
 ]
 
 
-# Get the rotation quaternion from the user
+# Gets the rotation quaternion from the user
 rotation_quaternion = get_user_rotation()
 
-# Rotate the cube's vertices
+# Rotates the cube's vertices
 rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
 
 
@@ -125,7 +123,8 @@ def main():
                 return
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glRotatef(1, 0, 1, 0)  # Rotates for better visualization
+        # Rotates about the y axis for better visualization
+        glRotatef(1, 0, 1, 0)
 
         # Draws original cube in blue
         draw_cube(cube_vertices, color="#3089ff")
