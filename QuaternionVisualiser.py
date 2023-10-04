@@ -60,8 +60,7 @@ def hex_to_rgb(hex_color):
     b = int(hex_color[4:6], 16) / 255.0
     return (r, g, b)
 
-
-# Defines the cube's vertices
+# CUBE
 cube_vertices = [
     (0.5, 0.5, 0.5),
     (0.5, 0.5, -0.5),
@@ -73,8 +72,7 @@ cube_vertices = [
     (-0.5, -0.5, -0.5),
 ]
 
-# Defines cube edges
-edges = [
+cube_edges = [
     (0, 1),
     (0, 2),
     (0, 4),
@@ -89,15 +87,67 @@ edges = [
     (6, 7),
 ]
 
+# SQUARE BASED PYRAMID
+pyramid_vertices = [
+    (-0.5, 0, -0.5),  # bottom-left
+    (0.5, 0, -0.5),   # bottom-right
+    (0.5, 0, 0.5),    # top-right
+    (-0.5, 0, 0.5),   # top-left
+    (0, 1, 0)         # apex
+]
+
+pyramid_edges = [
+    (0, 1),
+    (1, 2),
+    (2, 3),
+    (3, 0),
+    (0, 4),
+    (1, 4),
+    (2, 4),
+    (3, 4)
+]
+
+# ICOSAHEDRON
+phi = (1 + 5 ** 0.5) / 2.0  # golden ratio
+ico_vertices = [
+    (-1,  phi,  0),   # 0
+    ( 1,  phi,  0),   # 1
+    (-1, -phi,  0),   # 2
+    ( 1, -phi,  0),   # 3
+
+    ( 0, -1,  phi),   # 4
+    ( 0,  1,  phi),   # 5
+    ( 0, -1, -phi),   # 6
+    ( 0,  1, -phi),   # 7
+
+    ( phi,  0, -1),   # 8
+    ( phi,  0,  1),   # 9
+    (-phi,  0, -1),   # 10
+    (-phi,  0,  1)    # 11
+]
+
+ico_edges = [
+    (0, 11), (0, 5), (0, 1), (0, 7), (0, 10),
+    (1, 5), (1, 9), (1, 7), (1, 3),
+    (2, 11), (2, 4), (2, 6), (2, 10), (2, 3),
+    (3, 9), (3, 4), (3, 6), (3, 8),
+    (4, 9), (4, 11), (4, 5),
+    (5, 9), (5, 11),
+    (6, 7), (6, 8), (6, 10),
+    (7, 8), (7, 10),
+    (8, 9), (8, 11),
+    (9, 11), (10, 11)
+]
 
 # Gets the rotation quaternion from the user
 rotation_quaternion = get_user_rotation()
 
 # Rotates the cube's vertices
-rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
+cube_rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
+pyramid_rotated_vertices = [rotation_quaternion.rotate_point(v) for v in pyramid_vertices]
+ico_rotated_vertices = [rotation_quaternion.rotate_point(v) for v in ico_vertices]
 
-
-def draw_cube(vertices, color=(1, 1, 1)):  # default color is white
+def draw_shape(vertices, edges, color=(1, 1, 1)):
     if isinstance(color, str):
         color = hex_to_rgb(color)
     glColor3f(*color)
@@ -111,9 +161,11 @@ def draw_cube(vertices, color=(1, 1, 1)):  # default color is white
 def main():
     pygame.init()
     display = (600, 600)
+    
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     # argNames=('fovy', 'aspect', 'zNear', 'zFar')
-    gluPerspective(30, (display[0] / display[1]), 0.1, 50.0)
+    # gluPerspective(30, (display[0] / display[1]), 0.1, 50.0)
+    gluPerspective(90, (display[0] / display[1]), 0.1, 50.0)
     glTranslatef(0.0, 0.0, -5)
 
     while True:
@@ -126,10 +178,16 @@ def main():
         # Rotates about the y axis for better visualization
         glRotatef(1, 0, 1, 0)
 
-        # Draws original cube in blue
-        draw_cube(cube_vertices, color="#3089ff")
-        # Draws rotated cube in red
-        draw_cube(rotated_vertices, color="#ff2658")
+
+        
+        # draw_shape(cube_vertices, cube_edges, color="#A0D1FF")
+        # draw_shape(cube_rotated_vertices, cube_edges, color="#ff2658")
+
+        draw_shape(pyramid_vertices, pyramid_edges, color="#A0D1FF")
+        draw_shape(pyramid_rotated_vertices, pyramid_edges, color="#ff2658")
+
+        # draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
+        # draw_shape(ico_rotated_vertices, ico_edges, color="#ff2658")
 
         pygame.display.flip()
         pygame.time.wait(20)  # 20ms delay (how fast the cube rotates)
