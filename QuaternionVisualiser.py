@@ -128,16 +128,19 @@ ico_vertices = [
 
 ico_edges = [
     (0, 11), (0, 5), (0, 1), (0, 7), (0, 10),
-    (1, 5), (1, 9), (1, 7), (1, 3),
+    (1, 5), (1, 9), (1, 7), (1, 8),
     (2, 11), (2, 4), (2, 6), (2, 10), (2, 3),
     (3, 9), (3, 4), (3, 6), (3, 8),
-    (4, 9), (4, 11), (4, 5),
-    (5, 9), (5, 11),
+    (4, 5),
+    (5, 9), 
     (6, 7), (6, 8), (6, 10),
     (7, 8), (7, 10),
-    (8, 9), (8, 11),
-    (9, 11), (10, 11)
+    (8, 9), 
+    (10, 11)
 ]
+# removed edges intersecting through middle of icosahedron, still exterior edges missing
+
+
 
 # Gets the rotation quaternion from the user
 rotation_quaternion = get_user_rotation()
@@ -183,14 +186,14 @@ def main():
         # draw_shape(cube_vertices, cube_edges, color="#A0D1FF")
         # draw_shape(cube_rotated_vertices, cube_edges, color="#ff2658")
 
-        draw_shape(pyramid_vertices, pyramid_edges, color="#A0D1FF")
-        draw_shape(pyramid_rotated_vertices, pyramid_edges, color="#ff2658")
+        # draw_shape(pyramid_vertices, pyramid_edges, color="#A0D1FF")
+        # draw_shape(pyramid_rotated_vertices, pyramid_edges, color="#ff2658")
 
         # draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
-        # draw_shape(ico_rotated_vertices, ico_edges, color="#ff2658")
+        draw_shape(ico_rotated_vertices, ico_edges, color="#ff2658")
 
         pygame.display.flip()
-        pygame.time.wait(20)  # 20ms delay (how fast the cube rotates)
+        pygame.time.wait(200)  # 20ms delay (how fast the cube rotates)
 
 
 if __name__ == "__main__":
