@@ -199,7 +199,7 @@ def main():
         # draw_shape(pyramid_vertices, pyramid_edges, color="#A0D1FF")
         # draw_shape(pyramid_rotated_vertices, pyramid_edges, color="#ff2658")
 
-        draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
+        # draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
         draw_shape(ico_rotated_vertices, ico_edges, color="#ff2658")
 
         pygame.display.flip()
