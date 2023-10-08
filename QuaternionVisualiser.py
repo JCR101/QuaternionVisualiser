@@ -175,12 +175,12 @@ def draw_shape(vertices, edges, color=(1, 1, 1)):
 
 def main():
     pygame.init()
-    display = (600, 600)
+    display = (700, 700)
 
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     # argNames=('fovy', 'aspect', 'zNear', 'zFar')
     # gluPerspective(30, (display[0] / display[1]), 0.1, 50.0)
-    gluPerspective(90, (display[0] / display[1]), 0.1, 50.0)
+    gluPerspective(50, (display[0] / display[1]), 0.1, 50.0)
     glTranslatef(0.0, 0.0, -5)
 
     while True:
@@ -199,11 +199,11 @@ def main():
         # draw_shape(pyramid_vertices, pyramid_edges, color="#A0D1FF")
         # draw_shape(pyramid_rotated_vertices, pyramid_edges, color="#ff2658")
 
-        # draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
+        draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
         draw_shape(ico_rotated_vertices, ico_edges, color="#ff2658")
 
         pygame.display.flip()
-        pygame.time.wait(20)  # 20ms delay (how fast the cube rotates)
+        pygame.time.wait(30)  # 20ms delay (how fast the cube rotates)
 
 
 if __name__ == "__main__":
