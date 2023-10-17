@@ -151,17 +151,6 @@ ico_edges = [
 # removed edges intersecting through middle of icosahedron, still exterior edges missing
 
 
-# Gets the rotation quaternion from the user
-rotation_quaternion = get_user_rotation()
-
-# Rotates the cube's vertices
-cube_rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
-pyramid_rotated_vertices = [
-    rotation_quaternion.rotate_point(v) for v in pyramid_vertices
-]
-ico_rotated_vertices = [rotation_quaternion.rotate_point(v) for v in ico_vertices]
-
-
 def draw_shape(vertices, edges, color=(1, 1, 1)):
     if isinstance(color, str):
         color = hex_to_rgb(color)
@@ -174,17 +163,33 @@ def draw_shape(vertices, edges, color=(1, 1, 1)):
 
 
 def main():
+    # Shape Selection
+    print("Which shape would you like to draw?")
+    print("1: Cube")
+    print("2: Pyramid")
+    print("3: Icosahedron")
+    shape_choice = input("Enter your choice (1/2/3): ")
+
+    rotation_quaternion = get_user_rotation()
+
+    # Rotate the shape's vertices based on the user-defined quaternion
+    if shape_choice == "1":
+        rotated_vertices = [rotation_quaternion.rotate_point(v) for v in cube_vertices]
+    elif shape_choice == "2":
+        rotated_vertices = [
+            rotation_quaternion.rotate_point(v) for v in pyramid_vertices
+        ]
+    elif shape_choice == "3":
+        rotated_vertices = [rotation_quaternion.rotate_point(v) for v in ico_vertices]
+    else:
+        print("Invalid choice for shape. Exiting.")
+        return
+
     pygame.init()
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
     glTranslatef(0.0, 0.0, -5)
-
-    print("Which shape would you like to draw?")
-    print("1: Cube")
-    print("2: Pyramid")
-    print("3: Icosahedron")
-    choice = input("Enter your choice (1/2/3): ")
 
     while True:
         for event in pygame.event.get():
@@ -195,19 +200,15 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glRotatef(1, 0, 1, 0)  # Rotate for better visualization
 
-        if choice == "1":
+        if shape_choice == "1":
             draw_shape(cube_vertices, cube_edges, color="#A0D1FF")
-            draw_shape(cube_rotated_vertices, cube_edges, color="#ff2658")
-        elif choice == "2":
+            draw_shape(rotated_vertices, cube_edges, color="#ff2658")
+        elif shape_choice == "2":
             draw_shape(pyramid_vertices, pyramid_edges, color="#A0D1FF")
-            draw_shape(pyramid_rotated_vertices, pyramid_edges, color="#ff2658")
-        elif choice == "3":
+            draw_shape(rotated_vertices, pyramid_edges, color="#ff2658")
+        elif shape_choice == "3":
             draw_shape(ico_vertices, ico_edges, color="#A0D1FF")
-            draw_shape(ico_rotated_vertices, ico_edges, color="#ff2658")
-        else:
-            print("Invalid choice, please restart and select 1, 2, or 3.")
-            pygame.quit()
-            return
+            draw_shape(rotated_vertices, ico_edges, color="#ff2658")
 
         pygame.display.flip()
         pygame.time.wait(20)
