@@ -31,9 +31,9 @@ class Quaternion:  # Quaternion class definition
 def get_user_rotation():
     try:
         angle = float(input("Enter the angle of rotation (in degrees): "))
-        x = float(input("Enter the x component of the rotation axis: "))
-        y = float(input("Enter the y component of the rotation axis: "))
-        z = float(input("Enter the z component of the rotation axis: "))
+        x = float(input("Enter the x component of the quaternion: "))
+        y = float(input("Enter the y component of the quaternion: "))
+        z = float(input("Enter the z component of the quaternion: "))
 
         # Normalizes the rotation axis
         magnitude = math.sqrt(x**2 + y**2 + z**2)
@@ -198,7 +198,7 @@ def main():
                 return
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glRotatef(1, 0, 1, 0)  # Rotate for better visualization
+        glRotatef(1, 0, 1, 0)  # Rotate for better visualization aroud the y axis
 
         if shape_choice == "1":
             draw_shape(cube_vertices, cube_edges, color="#A0D1FF")
